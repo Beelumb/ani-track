@@ -8,6 +8,9 @@ import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 
+
+console.log("Debugging: App loaded with basename /ani-track");
+
 function App() {
   const router = createBrowserRouter(
     [
@@ -40,7 +43,7 @@ function App() {
       },
     ],
     {
-      basename: import.meta.env.BASE_URL, 
+      basename: "/ani-track",
     }
   );
 
