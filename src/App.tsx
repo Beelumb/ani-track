@@ -40,7 +40,7 @@ function App() {
       },
     ],
     {
-      basename: "/ani-track",
+      basename: import.meta.env.BASE_URL, 
     }
   );
 
