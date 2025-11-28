@@ -12,5 +12,5 @@ export default defineConfig({
       },
     }), 
   ],
-  base:"/ani-track"
+  base:"/ani-track/"
 });
