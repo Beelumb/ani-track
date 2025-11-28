@@ -8,37 +8,41 @@ import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 
-
 function App() {
-  const router = createBrowserRouter([
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <RootLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+          {
+            path: "anime",
+            element: <Anime />,
+          },
+          {
+            path: "/anime/:animeID/:slug",
+            element: <AnimePage />,
+          },
+          {
+            path: "login",
+            element: <LoginPage />,
+          },
+          {
+            path: "signup",
+            element: <SignupPage />,
+          },
+          {
+            path: "u/:usersNickname",
+            element: <ProfilePage />,
+          },
+        ],
+      },
+    ],
     {
-      path: "/",
-      element: <RootLayout />,
-      children: [
-        { index: true, element: <HomePage /> },
-        {
-          path: "anime",
-          element: <Anime />,
-        },
-        {
-          path: "/anime/:animeID/:slug",
-          element: <AnimePage />,
-        },
-        {
-          path: "login",
-          element: <LoginPage />,
-        },
-        {
-          path: "signup",
-          element: <SignupPage />,
-        },
-        {
-          path: "u/:usersNickname",
-          element: <ProfilePage />,
-        },
-      ],
-    },
-  ]);
+      basename: "/ani-track",
+    }
+  );
 
   return (
     <>
