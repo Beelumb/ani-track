@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+
+@theme {
+  --color-background: rgb(0, 0, 0);
+  --color-foreground: rgb(8, 8, 10);
+  --color-gray-text: rgb(153, 161, 176);
+
+  --color-card: rgb(0, 0, 0);
+  --color-card-foreground: rgb(8, 8, 10);
+
+  --color-primary: rgb(14, 11,14);
+  --color-primary-foreground: rgb(231,121,193);
+  --color-primary-border: rgb(62,25,49);
+
+  --color-secondary: rgb(39,39,42);
+  --color-secondary-foreground: rgb(250,250,250);
+
+  --color-accent: rgb(232, 121, 193);
+
+  --color-border: rgb(24, 24, 26);
+
+  --radius-default: 0.625rem;
+
+  /* General colors */
+  --color-success: rgb(0, 31, 15);
+  --color-success-foreground: rgb(89, 243, 166);
+  --color-success-border: rgb(0, 61, 28);
+
+  --color-info: rgb(0, 13, 31);
+  --color-info-foreground: rgb(88, 150, 243);
+  --color-info-border: rgb(25, 35, 62);
+
+  --color-warning: rgb(29, 31, 0);
+  --color-warning-foreground: rgb(243, 207, 88);
+  --color-warning-border: rgb(46, 46, 0);
+
+  --color-destructive: rgb(45, 6, 7);
+  --color-destructive-foreground: rgb(255, 158, 161);
+  --color-destructive-border: rgb(77, 4, 8);
+
+  /* Status colors */
+
+  --color-finished-background: var(--color-success);
+  --color-finished-border: var(--color-success-border);
+  --color-finished-foreground: var(--color-success-foreground);
+
+  --color-ongoing-background: var(--color-info);
+  --color-ongoing-border: var(--color-info-border);
+  --color-ongoing-foreground: var(--color-info-foreground);
+
+  --color-announced-background: var(--color-warning);
+  --color-announced-border: var(--color-warning-border);
+  --color-announced-foreground: var(--color-warning-foreground);
+
+  --color-discontinued-background: var(--color-destructive);
+  --color-discontinued-border: var(--color-destructive-border);
+  --color-discontinued-foreground: var(--color-destructive-foreground);
+
+  --color-paused-background: rgb(38, 38, 38);
+  --color-paused-border: rgb(51, 51, 51);
+  --color-paused-foreground: rgb(166, 166, 166);
+
+  
+
+}
+
+@theme {
+  /* Use native CSS @keyframes rules directly. 
+    Tailwind v4 automatically creates the 'animate-slide...' utilities from these.
+  */
+  @keyframes slideUpAndFade {
+    '0%': { opacity: '0', transform: 'translateY(2px)' },
+    '100%': { opacity: '1', transform: 'translateY(0)' }
+  }
+
+  @keyframes slideRightAndFade {
+    '0%': { opacity: '0', transform: 'translateX(-2px)' },
+    '100%': { opacity: '1', transform: 'translateX(0)' }
+  }
+
+  @keyframes slideDownAndFade {
+    '0%': { opacity: '0', transform: 'translateY(-2px)' },
+    '100%': { opacity: '1', transform: 'translateY(0)' }
+  }
+
+  @keyframes slideLeftAndFade {
+    '0%': { opacity: '0', transform: 'translateX(2px)' },
+    '100%': { opacity: '1', transform: 'translateX(0)' }
+  }
+  
+}
+
+@layer base {
+  body {
+    @apply bg-no-repeat bg-black;
+    background-size: 100% 100vh;
+    color: white;
+    background-image: linear-gradient(180deg,
+        #160820 0%,
+        #000 60%,
+        #000 100%);
+  }
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* Hide Firefox arrows */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.container {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; 
+}
