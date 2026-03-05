@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import Pagination from "../components/pagination";
 import { ChevronDown, Check, MoreVertical } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { useProfile } from "../hooks/useProfile";
 import type { UserAnime } from "../types/animeTypes";
 import EditAnimeDialog from "../components/dialogue/EditAnimeDialog";
 import { STATUS_OPTIONS } from "../config/statusConfig";
@@ -13,8 +13,7 @@ import { STATUS_OPTIONS } from "../config/statusConfig";
 export default function ProfilePage() {
   const [animes, setAnimes] = useState<UserAnime[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
-  const [username, setUsername] = useState("");
+  const { data: profile } = useProfile(); // Use shared profile hook
 
   // Pagination & Filter State
   const [page, setPage] = useState(1);
@@ -59,29 +58,6 @@ export default function ProfilePage() {
     });
     setStatusCounts(counts);
   };
-
-useEffect(() => {
-    async function getProfile() {
-      if (!user) return;
-
-      console.log("Fetching profile for user:", user.id); // Debugging line
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single(); // .single() throws an error if 0 or >1 rows are found
-
-      if (error) {
-        console.error("Error fetching profile:", error);
-      } else if (data) {
-        console.log("Profile found:", data); // Debugging line
-        setUsername(data.username);
-      }
-    }
-
-    getProfile();
-  }, [user]); // Dependency array is correct
 
   const fetchUserList = async () => {
     setLoading(true);
@@ -175,7 +151,7 @@ useEffect(() => {
           </div>
           <div className="mt-2">
             <h1 className="text-2xl font-bold text-white mb-2 capitalize">
-              {username}
+              {profile?.username || "User"}
             </h1>
           </div>{" "}
         </div>

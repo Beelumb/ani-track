@@ -108,6 +108,8 @@ export default function Anime() {
     queryKey: ["genres"],
     queryFn: getGenres,
     staleTime: Infinity,
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   const genreOptions = useMemo(() => {
@@ -165,6 +167,9 @@ export default function Anime() {
       ],
       queryFn: () => getAllAnimes({ page, ...apiParams }),
       placeholderData: keepPreviousData,
+      retry: 2, // Retry failed requests twice
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
+      staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
     });
 
   const filterKey = JSON.stringify({ ...apiParams, page: undefined });
@@ -288,8 +293,19 @@ export default function Anime() {
           <section>
             {isLoading && <div className="text-center p-8">Loading...</div>}
             {isError && (
-              <div className="text-center p-8 text-red-500">
-                Error loading data.
+              <div className="text-center p-8">
+                <div className="text-red-500 font-semibold mb-2">
+                  Unable to load anime data
+                </div>
+                <div className="text-sm text-gray-400">
+                  The Jikan API (MyAnimeList) may be experiencing issues. Please try again later.
+                </div>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-4 px-4 py-2 bg-secondary hover:bg-secondary/80 rounded-md text-sm"
+                >
+                  Retry
+                </button>
               </div>
             )}
 

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../lib/supabase";
+import { useProfile } from "../../hooks/useProfile";
 
 export default function NavBar() {
   const { user, signOut } = useAuth(); // Get user state
-  const [username, setUsername] = useState("");
+  const { data: profile } = useProfile(); // Use shared profile hook
   const [isScrolled, setIsScrolled] = useState(false); // State for scroll status
 
   const navigate = useNavigate();
@@ -33,29 +33,6 @@ export default function NavBar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    async function getProfile() {
-      if (!user) return;
-
-      console.log("Fetching profile for user:", user.id); // Debugging line
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single(); // .single() throws an error if 0 or >1 rows are found
-
-      if (error) {
-        console.error("Error fetching profile:", error);
-      } else if (data) {
-        console.log("Profile found:", data); // Debugging line
-        setUsername(data.username);
-      }
-    }
-
-    getProfile();
-  }, [user]); // Dependency array is correct
 
   return (
     <header
@@ -97,7 +74,7 @@ export default function NavBar() {
 
               {/* Avatar Image */}
               <div className="relative size-10 overflow-hidden rounded-md border border-border">
-                <Link to={`/u/${username}`}>
+                <Link to={`/u/${profile?.username || user?.id}`}>
                   <img
                     className="aspect-square size-full object-cover"
                     alt="avatar"

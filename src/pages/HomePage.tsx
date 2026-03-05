@@ -4,7 +4,7 @@ import AnimeCard from "../components/AnimeCard";
 import { Link } from "react-router";
 
 export default function HomePage() {
-  const { data } = useQuery(getAnimeOngoings());
+  const { data, isLoading, isError } = useQuery(getAnimeOngoings());
 
   console.log(data);
 
@@ -46,11 +46,25 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="relative grid -my-4 py-4 gap-4 lg:gap-8 md:grid-cols-8 no-scrollbar auto-cols-[12rem] grid-cols-scroll md:gradient-mask-none -mx-4 grid-flow-col overflow-x-scroll px-4 ">
-          {data?.data.map((anime) => (
-            <AnimeCard key={anime.mal_id} anime={anime} />
-          ))}
-        </div>
+        {isLoading && (
+          <div className="text-center p-8 text-gray-400">Loading ongoing anime...</div>
+        )}
+
+        {isError && (
+          <div className="text-center p-8">
+            <div className="text-red-500 text-sm">
+              Unable to load ongoing anime. The API may be experiencing issues.
+            </div>
+          </div>
+        )}
+
+        {!isLoading && !isError && (
+          <div className="relative grid -my-4 py-4 gap-4 lg:gap-8 md:grid-cols-8 no-scrollbar auto-cols-[12rem] grid-cols-scroll md:gradient-mask-none -mx-4 grid-flow-col overflow-x-scroll px-4 ">
+            {data?.data.map((anime) => (
+              <AnimeCard key={anime.mal_id} anime={anime} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

@@ -11,7 +11,7 @@ export const updateAnimeStatus = async (
 
   const formattedStatus = status.toLowerCase().replace(/\s+/g, "_");
 
-const payload = {
+  const payload = {
     user_id: user.id,
     mal_id: anime.mal_id,
     title: anime.title,
@@ -33,12 +33,28 @@ const payload = {
     updated_at: new Date().toISOString(),
   };
 
-  // 3. Upsert (Insert if new, Update if exists)
-  const { error } = await supabase
+  // 3. Update first. This works even when the DB table is missing a unique
+  // constraint for (user_id, mal_id), which upsert requires.
+  const { data: updatedRows, error: updateError } = await supabase
     .from("user_anime_list")
-    .upsert(payload, { onConflict: "user_id, mal_id" });
+    .update(payload)
+    .eq("user_id", user.id)
+    .eq("mal_id", anime.mal_id)
+    .select("mal_id")
+    .limit(1);
 
-  if (error) throw error;
+  if (updateError) throw updateError;
+
+  if ((updatedRows?.length ?? 0) > 0) {
+    return;
+  }
+
+  // 4. Insert if no existing row was updated.
+  const { error: insertError } = await supabase
+    .from("user_anime_list")
+    .insert(payload);
+
+  if (insertError) throw insertError;
 };
 
 export const getAnimeStatus = async (animeId: string) => {
